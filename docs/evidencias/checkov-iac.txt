@@ -1,0 +1,26 @@
+terraform scan results:
+
+Passed checks: 123, Failed checks: 7, Skipped checks: 0
+
+Check: CKV_GCP_62: "Bucket should log access"
+	FAILED for resource: google_storage_bucket.backup
+	File: /backup.tf:8-58
+Check: CKV_GCP_78: "Ensure Cloud storage has versioning enabled"
+	FAILED for resource: google_storage_bucket.backup
+	File: /backup.tf:8-58
+Check: CKV_GCP_40: "Ensure that Compute instances do not have public IP addresses"
+	FAILED for resource: google_compute_instance.bastion
+	File: /compute.tf:46-95
+Check: CKV_GCP_40: "Ensure that Compute instances do not have public IP addresses"
+	FAILED for resource: google_compute_instance.frontend
+	File: /compute.tf:100-159
+Check: CKV_GCP_82: "Ensure KMS keys are protected from deletion"
+	FAILED for resource: google_kms_crypto_key.disco
+	File: /kms.tf:19-27
+Check: CKV_GCP_82: "Ensure KMS keys are protected from deletion"
+	FAILED for resource: google_kms_crypto_key.backup
+	File: /kms.tf:29-36
+Check: CKV_GCP_106: "Ensure Google compute firewall ingress does not allow unrestricted http port 80 access"
+	FAILED for resource: google_compute_firewall.allow_web
+	File: /security.tf:20-34
+
