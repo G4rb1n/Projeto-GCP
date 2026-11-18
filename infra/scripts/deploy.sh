@@ -36,9 +36,20 @@ APP_URL="$(out app_url)"
 # Cada apply recria as VMs com novas chaves de host. Um known_hosts temporário
 # evita o erro de "host key changed" entre sessões; dentro da sessão, a chave
 # é fixada na primeira conexão (accept-new).
+# As opções vão num arquivo de config (-F) e não em -o: o ssh repassa o -F para
+# o processo do ProxyJump (-J), mas não repassa os -o, e o salto pelo bastion
+# falharia com "Host key verification failed".
 KNOWN_HOSTS="$(mktemp)"
-trap 'rm -f "${KNOWN_HOSTS}"' EXIT
-SSH_OPTS=(-o StrictHostKeyChecking=accept-new -o UserKnownHostsFile="${KNOWN_HOSTS}" -o ConnectTimeout=15)
+SSH_CFG="$(mktemp)"
+trap 'rm -f "${KNOWN_HOSTS}" "${SSH_CFG}"' EXIT
+cat >"${SSH_CFG}" <<EOF
+Host *
+  StrictHostKeyChecking accept-new
+  UserKnownHostsFile ${KNOWN_HOSTS}
+  ConnectTimeout 15
+  ServerAliveInterval 30
+EOF
+SSH_OPTS=(-F "${SSH_CFG}")
 JUMP=(-J "${SSH_USER}@${BASTION}")
 
 ssh_to() { local host="$1"; shift; ssh "${SSH_OPTS[@]}" "${JUMP[@]}" "${SSH_USER}@${host}" "$@"; }
@@ -47,7 +58,12 @@ echo "==> Bastion ${BASTION} | backend ${BACKEND_IP} | frontend ${FRONTEND_IP}"
 
 if [ "${BUILD}" = "1" ]; then
   echo "==> Compilando o backend"
-  (cd "${BACKEND_DIR}" && ./mvnw -B -q -DskipTests package)
+  # O repositório não versiona .mvn/wrapper (mesmo motivo do backend.yml usar
+  # `mvn`); usa o wrapper só se ele estiver completo.
+  MVN="mvn"
+  [ -f "${BACKEND_DIR}/.mvn/wrapper/maven-wrapper.properties" ] && MVN="./mvnw"
+  command -v "${MVN}" >/dev/null 2>&1 || [ "${MVN}" = "./mvnw" ] || { echo "Maven não encontrado (instale o Maven 3.9+ ou adicione .mvn/wrapper)"; exit 1; }
+  (cd "${BACKEND_DIR}" && "${MVN}" -B -q -DskipTests package)
   echo "==> Compilando o frontend"
   (cd "${FRONTEND_DIR}" && npm ci --no-audit --no-fund && npx ng build --configuration production)
 fi

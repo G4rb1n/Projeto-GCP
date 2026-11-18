@@ -8,6 +8,9 @@ SECRET_DB="$(md zad-secret-db)"
 BACKUP_CRON="$(md zad-backup-cron)"
 
 if [ ! -f /var/lib/zad/db-instalado ]; then
+  # Remove sobra de uma execução anterior que falhou: com o repositório
+  # inválido já listado, até o primeiro apt-get update abaixo falharia.
+  rm -f /etc/apt/sources.list.d/mysql.list
   apt_get update
   apt_get install ca-certificates curl gnupg
 
@@ -15,7 +18,13 @@ if [ ! -f /var/lib/zad/db-instalado ]; then
   if curl -fsSL https://repo.mysql.com/RPM-GPG-KEY-mysql-2023 | gpg --dearmor --yes -o /usr/share/keyrings/mysql.gpg; then
     echo "deb [signed-by=/usr/share/keyrings/mysql.gpg] http://repo.mysql.com/apt/ubuntu noble mysql-8.4-lts" \
       >/etc/apt/sources.list.d/mysql.list
-    apt_get update
+    # Com set -e, uma assinatura inválida aqui (ex.: EXPKEYSIG da chave 2023
+    # expirada) derrubava o script antes da contingência abaixo.
+    if ! apt_get update; then
+      log "AVISO: repositorio oficial do MySQL com assinatura invalida; removendo"
+      rm -f /etc/apt/sources.list.d/mysql.list
+      apt_get update
+    fi
   fi
 
   if ! apt_get install mysql-server; then
