@@ -36,6 +36,33 @@ A arquitetura projetada para a disciplina roda em `southamerica-east1`, dentro d
 | [`IA.md`](IA.md) | Declaração de uso de IA |
 | [`infra/`](infra/) | Terraform da Entrega 2 (rede, NAT, firewall, VMs, segredos, KMS e backup) |
 
+## Documentação da Entrega 2
+
+| Documento | Conteúdo |
+|---|---|
+| [`docs/seguranca.md`](docs/seguranca.md) | Controles S1 a S8, tratamento dos achados (Checkov, Trivy, Gitleaks) e análise de ameaças |
+| [`docs/alta-disponibilidade.md`](docs/alta-disponibilidade.md) | Proposta de HA (H1 a H7) e custo comparado ao cenário A |
+| [`docs/backup.md`](docs/backup.md) | Plano de backup (B1 a B7), política GFS e custo de 12 meses |
+| [`docs/errata.md`](docs/errata.md) | Divergências entre a Entrega 1 e o que foi implantado |
+| [`docs/adr/`](docs/adr/) | Novos: `004-alta-disponibilidade.md`, `005-backup.md`, `006-chave-ssh-por-metadados.md` |
+| [`docs/diagramas/`](docs/diagramas/) | `arquitetura-ha.drawio` e `arquitetura-ha.png` (proposta de HA) |
+| [`docs/custos/`](docs/custos/) | `estimativa-ha.csv`, `gfs-12-meses.csv` e, após a apresentação, o custo real |
+| [`docs/evidencias/`](docs/evidencias/) | Relatórios de análise, MFA, backup, demonstrações e destruição do ambiente |
+
+### Divisão das demonstrações
+
+> ⚠️ Preencher com os nomes. O professor pode fazer perguntas a qualquer integrante sobre qualquer parte.
+
+| Etapa | O que mostrar | Comandos principais | Responsável |
+|---|---|---|---|
+| D1: estado consistente | `terraform plan` sem alterações e `terraform output` | `terraform -chdir=infra plan`, `terraform -chdir=infra output` | _a definir_ |
+| D2: aplicação | HTTPS (cadeado), login, cadastrar produto, recarregar | navegador em `https://megainventory.duckdns.org` | _a definir_ |
+| D3: acesso administrativo | SSH ao bastion, ProxyJump à vm-backend, recusa de senha | `ssh zadadmin@<bastion>`, `ssh -J zadadmin@<bastion> zadadmin@10.10.2.10`, `ssh -o PubkeyAuthentication=no zadadmin@<bastion>` | _a definir_ |
+| D4: NAT e isolamento | IP de saída = `nat_public_ip`; backend sem IP externo; regra SSH só com /32 | `curl -s https://ifconfig.me` na vm-backend; `gcloud compute instances list`; `gcloud compute firewall-rules describe zad-allow-ssh-admin` | _a definir_ |
+| D5: segurança | Segredos no Secret Manager e fora do Git; relatório com um achado corrigido (CKV_GCP_32) e um aceito (CKV_GCP_106) | `gcloud secrets list`; `docs/evidencias/checkov-iac.txt` | _a definir_ |
+| D6: backup | Bucket, ciclo de vida (1 dia), CMEK, cópia existente; custo anual GFS | `sudo zad-backup.sh` na vm-db; `gcloud storage ls -l gs://<bucket>/diario/`; `gcloud storage buckets describe gs://<bucket>` | _a definir_ |
+| D7: alta disponibilidade | Diagrama e análise de custo | `docs/alta-disponibilidade.md` | _a definir_ |
+
 ## Entrega 2 — Implantação na GCP
 
 > ⚠️ **Este ambiente gera custo, pago pelo grupo.** O Cloud NAT e os IPs públicos são cobrados por hora mesmo sem tráfego. Suba o ambiente só para testar e **destrua ao final de cada sessão** (`terraform destroy`). Há um alerta de orçamento de R$ 100/mês (≈ US$ 20) na conta de faturamento, criado antes do primeiro `apply`.

@@ -30,3 +30,14 @@ Estimativas feitas na **Google Cloud Pricing Calculator** (<https://cloud.google
 **IP Address e NAT Gateway não têm campo de horas** na calculadora: ela sempre considera o mês inteiro (730 h). No cenário B, o custo desses dois itens foi calculado proporcionalmente (valor mensal × 100 / 730), porque eles são destruídos junto com as VMs entre as sessões. Com esse ajuste, o custo esperado do cenário B é **US$ 13,33**. Detalhes na seção 5.9 do `arquitetura.md`.
 
 **Link no final dos CSVs:** o arquivo do cenário B foi gerado a partir de uma cópia da estimativa do cenário A, e por isso a última linha do CSV repete o link do cenário A. O link correto de cada cenário é o listado acima.
+
+## Entrega 2
+
+| Arquivo | Conteúdo |
+|---|---|
+| `estimativa-ha.csv` | Custo mensal da proposta de alta disponibilidade (Parte C), comparado ao cenário A. **Confirmar na calculadora e colar o link abaixo** |
+| `gfs-12-meses.csv` | Custo da política de backup GFS mês a mês, por 12 meses (Parte D, B7) |
+| _(após a apresentação)_ | Custo real observado no painel de faturamento × cenário B da Entrega 1 |
+
+- Link da estimativa de HA na calculadora: _a preencher_
+

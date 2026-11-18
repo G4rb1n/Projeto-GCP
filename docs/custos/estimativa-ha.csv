@@ -1,0 +1,10 @@
+item,configuracao,horas_mes,custo_mensal_USD,observacao
+Compute Engine - mig-frontend,2x e2-micro (zonas a e b) + 2x 10 GB pd-standard,730,20.61,mesmo valor da calculadora do cenario A para 2x e2-micro
+Compute Engine - mig-backend,2x e2-small (zonas a e b) + 2x 20 GB pd-balanced,730,44.83,minimo do autoescalonamento; picos ate 4 instancias nao incluidos
+Compute Engine - bastion,1x e2-micro + 10 GB pd-standard + 1 IP externo estatico,730,12.14,MIG de 1 instancia com autocorrecao
+Load balancer externo de aplicacao (global),regras de encaminhamento 443 e 80 (dentro das 5 primeiras) + ~4 GiB processados,730,18.30,confirmar na calculadora
+Load balancer interno de passagem (API),1 regra de encaminhamento regional,730,18.25,confirmar na calculadora
+Cloud NAT,gateway para 4 VMs sem IP externo + 1 IP + 2 GiB processados,730,7.83,0.0014/VM/h + 0.005/h IP + 0.045/GiB
+Cloud SQL for MySQL Enterprise HA,db-custom-1-3840 (1 vCPU 3.75 GiB) regional + 10 GB SSD,730,132.12,vCPU HA 0.108/h e memoria HA 0.018/GiB-h em southamerica-east1; armazenamento estimado em ~4.00 (confirmar)
+Egress para a internet,2 GiB Sao Paulo -> America do Sul,,0.38,igual ao cenario A
+TOTAL,,,254.46,cenario A da Entrega 1 = 75.25 (+238%)

@@ -15,7 +15,9 @@ if [ ! -f /var/lib/zad/db-instalado ]; then
   apt_get install ca-certificates curl gnupg
 
   # Repositório APT oficial do MySQL, série 8.4 LTS (a 8.0 chegou ao fim de vida).
-  if curl -fsSL https://repo.mysql.com/RPM-GPG-KEY-mysql-2023 | gpg --dearmor --yes -o /usr/share/keyrings/mysql.gpg; then
+  # A chave RPM-GPG-KEY-mysql-2023 expirou em 22/10/2025 (bug #119212 do MySQL);
+  # os pacotes atuais são assinados com a chave publicada como RPM-GPG-KEY-mysql-2025.
+  if curl -fsSL https://repo.mysql.com/RPM-GPG-KEY-mysql-2025 | gpg --dearmor --yes -o /usr/share/keyrings/mysql.gpg; then
     echo "deb [signed-by=/usr/share/keyrings/mysql.gpg] http://repo.mysql.com/apt/ubuntu noble mysql-8.4-lts" \
       >/etc/apt/sources.list.d/mysql.list
     # Com set -e, uma assinatura inválida aqui (ex.: EXPKEYSIG da chave 2023
