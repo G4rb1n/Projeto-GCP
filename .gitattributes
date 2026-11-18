@@ -1,0 +1,6 @@
+# Scripts executados em Linux (startup-scripts das VMs e deploy.sh no Git Bash)
+# precisam de LF mesmo quando o repositório é clonado no Windows (core.autocrlf=true).
+*.sh text eol=lf
+mvnw text eol=lf
+*.tf text eol=lf
+*.tftpl text eol=lf
