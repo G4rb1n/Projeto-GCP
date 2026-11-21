@@ -41,3 +41,19 @@ As ferramentas de IA foram usadas como apoio à redação e à organização do
 material. As decisões técnicas de arquitetura, os valores de custo e as
 justificativas são de responsabilidade do grupo, que revisou e validou todo o
 conteúdo entregue.
+
+## Entrega 2
+
+| Integrante | Ferramenta | Onde foi usada | O que a IA produziu |
+|---|---|---|---|
+| Lipe | Claude (chat) | Planejamento, infraestrutura e documentação | Plano de trabalho da entrega; primeira versão do Terraform (`infra/*.tf`), dos startup-scripts, do `deploy.sh`, do workflow `seguranca-iac.yml` e do perfil Spring `vm`; rascunhos de `seguranca.md`, `errata.md`, `backup.md`, `alta-disponibilidade.md`, ADRs 004 a 006, planilhas de custo e diagrama de HA; apoio na configuração da conta de faturamento, do alerta de orçamento e do DuckDNS |
+| Lipe | Claude Code (VS Code) | Execução e depuração | Aplicou o código no repositório, rodou `terraform init/plan/apply/destroy` com aprovação do integrante a cada passo, corrigiu problemas encontrados na implantação (finais de linha CRLF, ProxyJump no `deploy.sh`, chave GPG expirada do MySQL, `mvnw` sem wrapper) e gerou as evidências |
+
+### O que foi verificado e corrigido pelo grupo (Entrega 2)
+
+- **Plano revisado antes de cada `apply`.** O resumo do `terraform plan` (53 recursos) foi conferido pelo integrante, incluindo a regra de SSH só com o IP /32 e as VMs privadas sem IP externo.
+- **Funcionamento testado na nuvem real**, não só no papel: aplicação acessada por HTTPS, SSH via bastion, saída pelo NAT, backup gravado no bucket e ambiente destruído ao final (18/11).
+- **Problemas que a IA não previu** e que só apareceram na implantação foram corrigidos e registrados na errata (E10, E20).
+- **Rede `default` removida** por decisão do grupo, após revisão do console.
+- _Completar: valores de custo conferidos na calculadora oficial (HA e GFS), relatórios do Trivy e do Gitleaks revisados, e o que cada integrante revisou para conseguir defender na apresentação._
+

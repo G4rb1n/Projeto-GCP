@@ -1,0 +1,30 @@
+# Copie para terraform.tfvars (que está no .gitignore) e ajuste.
+# O token do DuckDNS NÃO vai aqui: exporte TF_VAR_duckdns_token no terminal.
+
+project_id = "mega-inventory-gcp"
+
+# IP público /32 de cada integrante (descubra com: curl -s https://ifconfig.me)
+# Os valores abaixo são exemplos de documentação (RFC 5737); troque pelos reais.
+admin_ssh_cidrs = [
+  "203.0.113.10/32",
+  "198.51.100.20/32",
+]
+
+ssh_user            = "zadadmin"
+ssh_public_key_path = "~/.ssh/chave-grupo.pub"
+
+domain = "megainventory.duckdns.org"
+
+# selfsigned nos testes; letsencrypt-staging para testar a emissão;
+# letsencrypt só no ensaio final e na apresentação (limite de 5 certificados
+# iguais por semana).
+tls_mode          = "selfsigned"
+letsencrypt_email = ""
+
+# Tipos de máquina da Entrega 1 (seção 5.7)
+machine_type_bastion  = "e2-micro"
+machine_type_frontend = "e2-micro"
+machine_type_backend  = "e2-small"
+machine_type_db       = "e2-small"
+
+backup_retention_days = 1

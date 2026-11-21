@@ -30,3 +30,18 @@ Estimativas feitas na **Google Cloud Pricing Calculator** (<https://cloud.google
 **IP Address e NAT Gateway não têm campo de horas** na calculadora: ela sempre considera o mês inteiro (730 h). No cenário B, o custo desses dois itens foi calculado proporcionalmente (valor mensal × 100 / 730), porque eles são destruídos junto com as VMs entre as sessões. Com esse ajuste, o custo esperado do cenário B é **US$ 13,33**. Detalhes na seção 5.9 do `arquitetura.md`.
 
 **Link no final dos CSVs:** o arquivo do cenário B foi gerado a partir de uma cópia da estimativa do cenário A, e por isso a última linha do CSV repete o link do cenário A. O link correto de cada cenário é o listado acima.
+
+## Entrega 2
+
+| Arquivo | Conteúdo |
+|---|---|
+| `estimativa-ha-calculadora.csv` | Exportação da calculadora: proposta de alta disponibilidade (Parte C), operação contínua, **US$ 264,51/mês** |
+| `estimativa-ha.csv` | Primeira estimativa da HA, feita com as tabelas públicas de preço antes da calculadora (US$ 254,46); mantida para comparação |
+| `gfs-12-meses.csv` | Custo da política de backup GFS mês a mês, por 12 meses (Parte D, B7) |
+| `estimativa-backup-calculadora.csv` | Exportação da calculadora: gerações do GFS no mês 12 (US$ 0,0643/mês) e política mínima (US$ 0,00035/mês) |
+| _(após a apresentação)_ | Custo real observado no painel de faturamento × cenário B da Entrega 1 |
+
+- **Proposta de HA (Parte C): US$ 264,51/mês** — <https://cloud.google.com/products/calculator?dl=CjhDaVF6Tm1RNE9HTTVaaTA1TTJSbUxUUTNNR1l0WVRBNU1TMHpNMlUyTmpJM016Qm1OemtRQVE9PRAOGiRFQTUwODg2OS00MDgwLTREMjctODAxOS0yMTFENUY2RjA1QjE>
+- **Backup (Parte D): GFS no mês 12 US$ 0,0643/mês e política mínima US$ 0,00035/mês** — <https://cloud.google.com/products/calculator?dl=CjhDaVJrWVdJd09EazNOeTA1TURBMUxUUmpPR1l0WW1RNVpTMWtNR0psWWpSa01qWmpZVE1RQVE9PRAJGiQ1MEYyOTJENi1FQ0NDLTREMjMtOERGQy05NjlDOUI1OEVBOEU>
+
+A calculadora gera um link novo a cada compartilhamento ou exportação. Os links válidos são os desta página (conferidos em 21/11). No `estimativa-backup-calculadora.csv`, o link interno mostra a mesma estimativa; no `estimativa-ha-calculadora.csv`, o link interno é de uma versão anterior (só as VMs, US$ 75,74), embora as linhas do CSV sejam da estimativa completa.

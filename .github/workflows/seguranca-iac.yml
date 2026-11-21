@@ -1,0 +1,83 @@
+# S7 - Análise automatizada (Entrega 2):
+#  - qualidade do Terraform: terraform fmt -check e terraform validate (seção 7.2);
+#  - análise de segurança da IaC com Trivy (config) e Checkov;
+#  - detecção de segredos em TODO o histórico do Git com Gitleaks.
+# Os relatórios ficam como artefatos da execução e são copiados para
+# docs/evidencias/ na entrega.
+name: seguranca-iac
+
+on:
+  push:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    name: Terraform fmt/validate + Trivy + Checkov
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+
+      - name: terraform fmt -check
+        run: terraform -chdir=infra fmt -check -recursive -diff
+
+      - name: terraform validate
+        run: |
+          terraform -chdir=infra init -backend=false -input=false
+          terraform -chdir=infra validate
+
+      - name: Trivy (configuração da IaC)
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: config
+          scan-ref: infra
+          format: table
+          output: trivy-iac.txt
+          exit-code: "0"
+
+      - name: Checkov
+        run: |
+          pip install --quiet checkov
+          checkov -d infra --framework terraform --compact --output cli > checkov-iac.txt || true
+          tail -n 40 checkov-iac.txt
+
+      - name: Publicar relatórios
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorios-iac
+          path: |
+            trivy-iac.txt
+            checkov-iac.txt
+
+  segredos:
+    name: Gitleaks (histórico completo)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout com todo o histórico
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Gitleaks
+        run: |
+          docker run --rm -v "$PWD:/repo" zricethezav/gitleaks:latest \
+            detect --source /repo --redact --verbose \
+            --report-format json --report-path /repo/gitleaks.json
+
+      - name: Publicar relatório
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: relatorio-gitleaks
+          path: gitleaks.json
