@@ -102,7 +102,7 @@ Afinidade de sessão no LB: **desnecessária**.
 ## Custo da alta disponibilidade
 
 Estimativa em operação contínua (730 h/mês) na **calculadora oficial** (Google Cloud Pricing Calculator), região São Paulo, preços de 21/11/2026:
-**<https://cloud.google.com/products/calculator?dl=CjhDaVF6Tm1RNE9HTTVaaTA1TTJSbUxUUTNNR1l0WVRBNU1TMHpNMlUyTmpJM016Qm1OemtRQVE9PRAOGiRFQTUwODg2OS00MDgwLTREMjctODAxOS0yMTFENUY2RjA1QjE>**. Exportação por SKU: [`custos/estimativa-ha-calculadora.csv`](custos/estimativa-ha-calculadora.csv). A calculadora gera um link novo a cada compartilhamento ou exportação; por isso o link gravado no CSV é diferente do link acima, mas os dois são da mesma estimativa (total de US$ 264,51).
+**<https://cloud.google.com/products/calculator?dl=CjhDaVF6Tm1RNE9HTTVaaTA1TTJSbUxUUTNNR1l0WVRBNU1TMHpNMlUyTmpJM016Qm1OemtRQVE9PRAOGiRFQTUwODg2OS00MDgwLTREMjctODAxOS0yMTFENUY2RjA1QjE>**. Exportação por SKU: [`custos/estimativa-ha-calculadora.csv`](custos/estimativa-ha-calculadora.csv). **O link válido é o deste documento** (conferido em 21/11: total de US$ 264,51). O link gravado no fim do CSV é de uma versão anterior da estimativa, ainda só com as duas VMs (US$ 75,74); os valores por SKU do CSV, porém, são os da estimativa completa e somam os mesmos US$ 264,51.
 
 | Item na calculadora | Configuração | Custo mensal |
 |---|---|---|
