@@ -49,6 +49,8 @@ A arquitetura projetada para a disciplina roda em `southamerica-east1`, dentro d
 | [`docs/custos/`](docs/custos/) | `estimativa-ha.csv`, `gfs-12-meses.csv` e, após a apresentação, o custo real |
 | [`docs/evidencias/`](docs/evidencias/) | Relatórios de análise, MFA, backup, demonstrações e destruição do ambiente |
 
+**Issues do professor:** até 22/11/2026 não havia issues abertas no repositório (aba Issues: 0 abertas, 0 fechadas).
+
 ### Divisão das demonstrações
 
 > ⚠️ Preencher com os nomes. O professor pode fazer perguntas a qualquer integrante sobre qualquer parte.

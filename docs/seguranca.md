@@ -62,6 +62,8 @@ Execução no **histórico completo** do repositório (`fetch-depth: 0`) em 21/1
 | `generic-api-key` em `jwt.secret` | Baixa | `zadinventory-backend/zadinventory/src/test/resources/application-test.properties`, linha 27 (versão atual) | **Aceito (falso positivo)** | Valor fixo usado só nos testes automatizados com banco H2 em memória. Não é usado em nenhum ambiente; o segredo JWT de produção é gerado pelo Terraform (`random_bytes`) e fica no Secret Manager |
 | `generic-api-key` em `jwt.secret` (2 ocorrências) | Baixa | `backend/src/test/resources/application-test.properties`, linha 34, commit `7db5355a` (03/08/2026, antes da reorganização das pastas) | **Aceito (falso positivo)** | O mesmo valor de teste, marcado no próprio arquivo como "valores dummy apenas para os testes". Permanece no histórico, mas não protege nada |
 
+Os três achados estão registrados em `.gitleaksignore` (por *fingerprint*: commit, arquivo, regra e linha), para que o job do Gitleaks no workflow passe com eles e **continue falhando se aparecer qualquer segredo novo** em qualquer arquivo ou commit.
+
 **Segredos reais verificados:** token do DuckDNS, chave SSH do grupo, `terraform.tfvars`, `terraform.tfstate` e `tfplan` **nunca** foram commitados (confirmado pelo Gitleaks e por `git log --all -- '*.tfstate' '*.tfvars' 'tfplan'`). O token do DuckDNS apareceu numa captura de tela local durante a configuração (18/11), que não foi versionada e já foi apagada. O grupo decidiu **não** regenerar o token (risco aceito na ameaça A3).
 
 ## 3. Análise de ameaças

@@ -1,0 +1,5 @@
+# Achados do Gitleaks analisados e aceitos como falsos positivos (docs/seguranca.md, seção 2.3).
+# Todos são a chave JWT fictícia usada só nos testes automatizados com H2.
+# Qualquer segredo novo continua fazendo o job "Gitleaks (histórico completo)" falhar.
+90daa7c5d4e173debe7721f43f38a41bcdc00b04:zadinventory-backend/zadinventory/src/test/resources/application-test.properties:generic-api-key:27
+7db5355aae4190a293596fea0705cb33d2b4a980:backend/src/test/resources/application-test.properties:generic-api-key:34
