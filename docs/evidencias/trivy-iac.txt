@@ -1,0 +1,182 @@
+
+Report Summary
+
+┌────────────┬───────────┬───────────────────┐
+│   Target   │   Type    │ Misconfigurations │
+├────────────┼───────────┼───────────────────┤
+│ .          │ terraform │         0         │
+├────────────┼───────────┼───────────────────┤
+│ backup.tf  │ terraform │         1         │
+├────────────┼───────────┼───────────────────┤
+│ compute.tf │ terraform │         6         │
+└────────────┴───────────┴───────────────────┘
+Legend:
+- '-': Not scanned
+- '0': Clean (no security findings detected)
+
+
+backup.tf (terraform)
+=====================
+Tests: 1 (SUCCESSES: 0, FAILURES: 1)
+Failures: 1 (UNKNOWN: 0, LOW: 0, MEDIUM: 1, HIGH: 0, CRITICAL: 0)
+
+GCP-0078 (MEDIUM): Storage bucket versioning is not enabled.
+════════════════════════════════════════
+Object versioning in Cloud Storage is recommended to protect against accidental or malicious deletions.
+
+
+See https://avd.aquasec.com/misconfig/gcp-0078
+────────────────────────────────────────
+ backup.tf:27
+   via backup.tf:26-28 (versioning)
+    via backup.tf:8-58 (google_storage_bucket.backup)
+────────────────────────────────────────
+   8   resource "google_storage_bucket" "backup" {
+   .   
+  27 [     enabled = false
+  ..   
+  58   }
+────────────────────────────────────────
+
+
+
+compute.tf (terraform)
+======================
+Tests: 6 (SUCCESSES: 0, FAILURES: 6)
+Failures: 6 (UNKNOWN: 0, LOW: 0, MEDIUM: 4, HIGH: 2, CRITICAL: 0)
+
+GCP-0031 (HIGH): Instance has a public IP allocated.
+════════════════════════════════════════
+Instances should not be publicly exposed to the internet
+
+
+See https://avd.aquasec.com/misconfig/gcp-0031
+────────────────────────────────────────
+ compute.tf:70-72
+   via compute.tf:66-73 (network_interface)
+    via compute.tf:46-95 (google_compute_instance.bastion)
+────────────────────────────────────────
+  46   resource "google_compute_instance" "bastion" {
+  ..   
+  70 ┌     access_config {
+  71 │       network_tier = "PREMIUM"
+  72 └     }
+  ..   
+  95   }
+────────────────────────────────────────
+
+
+GCP-0031 (HIGH): Instance has a public IP allocated.
+════════════════════════════════════════
+Instances should not be publicly exposed to the internet
+
+
+See https://avd.aquasec.com/misconfig/gcp-0031
+────────────────────────────────────────
+ compute.tf:124-127
+   via compute.tf:120-128 (network_interface)
+    via compute.tf:100-159 (google_compute_instance.frontend)
+────────────────────────────────────────
+ 100   resource "google_compute_instance" "frontend" {
+ ...   
+ 124 ┌     access_config {
+ 125 │       nat_ip       = google_compute_address.frontend.address
+ 126 │       network_tier = "PREMIUM"
+ 127 └     }
+ ...   
+ 159   }
+────────────────────────────────────────
+
+
+GCP-0036 (MEDIUM): Instance has OS Login disabled.
+════════════════════════════════════════
+OS Login automatically revokes the relevant SSH keys when an IAM user has their access revoked.
+
+
+See https://avd.aquasec.com/misconfig/gcp-0036
+────────────────────────────────────────
+ compute.tf:201-210
+   via compute.tf:164-220 (google_compute_instance.backend)
+────────────────────────────────────────
+ 164   resource "google_compute_instance" "backend" {
+ ...   
+ 201 ┌   metadata = {
+ 202 │     ssh-keys               = local.ssh_keys_metadata
+ 203 │     block-project-ssh-keys = true
+ 204 │     enable-oslogin         = "FALSE"
+ 205 │     serial-port-enable     = false
+ 206 │     startup-script         = local.startup["backend"]
+ 207 └     zad-db-ip              = var.ip_db
+ ...   
+────────────────────────────────────────
+
+
+GCP-0036 (MEDIUM): Instance has OS Login disabled.
+════════════════════════════════════════
+OS Login automatically revokes the relevant SSH keys when an IAM user has their access revoked.
+
+
+See https://avd.aquasec.com/misconfig/gcp-0036
+────────────────────────────────────────
+ compute.tf:86-92
+   via compute.tf:46-95 (google_compute_instance.bastion)
+────────────────────────────────────────
+  46   resource "google_compute_instance" "bastion" {
+  ..   
+  86 ┌   metadata = {
+  87 │     ssh-keys               = local.ssh_keys_metadata
+  88 │     block-project-ssh-keys = true
+  89 │     enable-oslogin         = "FALSE"
+  90 │     serial-port-enable     = false
+  91 │     startup-script         = local.startup["bastion"]
+  92 └   }
+  ..   
+────────────────────────────────────────
+
+
+GCP-0036 (MEDIUM): Instance has OS Login disabled.
+════════════════════════════════════════
+OS Login automatically revokes the relevant SSH keys when an IAM user has their access revoked.
+
+
+See https://avd.aquasec.com/misconfig/gcp-0036
+────────────────────────────────────────
+ compute.tf:261-272
+   via compute.tf:225-281 (google_compute_instance.db)
+────────────────────────────────────────
+ 225   resource "google_compute_instance" "db" {
+ ...   
+ 261 ┌   metadata = {
+ 262 │     ssh-keys               = local.ssh_keys_metadata
+ 263 │     block-project-ssh-keys = true
+ 264 │     enable-oslogin         = "FALSE"
+ 265 │     serial-port-enable     = false
+ 266 │     startup-script         = local.startup["db"]
+ 267 └     zad-db-ip              = var.ip_db
+ ...   
+────────────────────────────────────────
+
+
+GCP-0036 (MEDIUM): Instance has OS Login disabled.
+════════════════════════════════════════
+OS Login automatically revokes the relevant SSH keys when an IAM user has their access revoked.
+
+
+See https://avd.aquasec.com/misconfig/gcp-0036
+────────────────────────────────────────
+ compute.tf:141-152
+   via compute.tf:100-159 (google_compute_instance.frontend)
+────────────────────────────────────────
+ 100   resource "google_compute_instance" "frontend" {
+ ...   
+ 141 ┌   metadata = {
+ 142 │     ssh-keys               = local.ssh_keys_metadata
+ 143 │     block-project-ssh-keys = true
+ 144 │     enable-oslogin         = "FALSE"
+ 145 │     serial-port-enable     = false
+ 146 │     startup-script         = local.startup["frontend"]
+ 147 └     zad-domain             = var.domain
+ ...   
+────────────────────────────────────────
+
+
