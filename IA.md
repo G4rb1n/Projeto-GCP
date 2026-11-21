@@ -60,5 +60,5 @@ conteúdo entregue.
 - **Relatórios reais do Trivy e do Gitleaks** substituíram a previsão inicial da IA na tabela de achados; cada achado alto recebeu decisão.
 - **O que cada integrante revisou para a defesa:**
   - **Luiz Felipe (D1 a D4):** Terraform (`infra/*.tf`), plano e outputs, `deploy.sh`, regras de firewall, SSH pelo bastion e Cloud NAT; executou as implantações e os testes.
-  - **Eduardo (D5 a D7):** _completar com o que revisou — por exemplo: `docs/seguranca.md` (controles S1–S8, achados e ameaças), `docs/backup.md` e a política mínima, `docs/alta-disponibilidade.md` e o custo da HA._
+  - **Eduardo (D5 a D7):** `docs/seguranca.md` (controles S1–S8, relatórios do Checkov, Trivy e Gitleaks, achados aceitos e ameaças A1–A7), segredos no Secret Manager e evidência de MFA; `docs/backup.md` (script de backup, bucket com CMEK e ciclo de vida, política mínima e custo GFS); `docs/alta-disponibilidade.md` (diagrama, estimativa da calculadora e justificativa); preparou as respostas da defesa técnica.
 
