@@ -55,5 +55,10 @@ conteúdo entregue.
 - **Funcionamento testado na nuvem real**, não só no papel: aplicação acessada por HTTPS, SSH via bastion, saída pelo NAT, backup gravado no bucket e ambiente destruído ao final (18/11).
 - **Problemas que a IA não previu** e que só apareceram na implantação foram corrigidos e registrados na errata (E10, E20).
 - **Rede `default` removida** por decisão do grupo, após revisão do console.
-- _Completar: valores de custo conferidos na calculadora oficial (HA e GFS), relatórios do Trivy e do Gitleaks revisados, e o que cada integrante revisou para conseguir defender na apresentação._
+- **Segunda implantação completa (21/11)** com Let's Encrypt e MySQL 8.4: login, CRUD, venda e cadastro de um novo usuário testados no navegador. O erro de CORS (403 no login), que a IA não havia previsto, foi diagnosticado no console do navegador e corrigido (errata E21).
+- **Custos conferidos na calculadora oficial** pelo integrante: a estimativa de HA ficou em US$ 264,51 (a primeira estimativa da IA, feita com tabelas públicas, era US$ 254,46) e os preços do GFS foram confirmados. Os links foram abertos e conferidos antes da entrega; um link desatualizado dentro de um CSV exportado foi identificado e registrado.
+- **Relatórios reais do Trivy e do Gitleaks** substituíram a previsão inicial da IA na tabela de achados; cada achado alto recebeu decisão.
+- **O que cada integrante revisou para a defesa:**
+  - **Luiz Felipe (D1 a D4):** Terraform (`infra/*.tf`), plano e outputs, `deploy.sh`, regras de firewall, SSH pelo bastion e Cloud NAT; executou as implantações e os testes.
+  - **Eduardo (D5 a D7):** _completar com o que revisou — por exemplo: `docs/seguranca.md` (controles S1–S8, achados e ameaças), `docs/backup.md` e a política mínima, `docs/alta-disponibilidade.md` e o custo da HA._
 

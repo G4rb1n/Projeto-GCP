@@ -49,21 +49,21 @@ A arquitetura projetada para a disciplina roda em `southamerica-east1`, dentro d
 | [`docs/custos/`](docs/custos/) | `estimativa-ha.csv`, `gfs-12-meses.csv` e, após a apresentação, o custo real |
 | [`docs/evidencias/`](docs/evidencias/) | Relatórios de análise, MFA, backup, demonstrações e destruição do ambiente |
 
-**Issues do professor:** até 22/11/2026 não havia issues abertas no repositório (aba Issues: 0 abertas, 0 fechadas).
+**Issues do professor:** em 21/11/2026 não havia issues abertas no repositório (aba Issues: 0 abertas, 0 fechadas).
 
 ### Divisão das demonstrações
 
-> ⚠️ Preencher com os nomes. O professor pode fazer perguntas a qualquer integrante sobre qualquer parte.
+Luiz Felipe conduz D1 a D4 (infraestrutura, aplicação, acesso e rede) e Eduardo conduz D5 a D7 (segurança, backup e alta disponibilidade). Os dois devem conseguir responder sobre qualquer parte, porque o professor pode perguntar a qualquer integrante.
 
 | Etapa | O que mostrar | Comandos principais | Responsável |
 |---|---|---|---|
-| D1: estado consistente | `terraform plan` sem alterações e `terraform output` | `terraform -chdir=infra plan`, `terraform -chdir=infra output` | _a definir_ |
-| D2: aplicação | HTTPS (cadeado), login, cadastrar produto, recarregar | navegador em `https://megainventory.duckdns.org` | _a definir_ |
-| D3: acesso administrativo | SSH ao bastion, ProxyJump à vm-backend, recusa de senha | `ssh zadadmin@<bastion>`, `ssh -J zadadmin@<bastion> zadadmin@10.10.2.10`, `ssh -o PubkeyAuthentication=no -o PreferredAuthentications=password zadadmin@<bastion>` | _a definir_ |
-| D4: NAT e isolamento | IP de saída = `nat_public_ip`; backend sem IP externo; regra SSH só com /32 | `curl -s https://ifconfig.me` na vm-backend; `gcloud compute instances list`; `gcloud compute firewall-rules describe zad-allow-ssh-admin` | _a definir_ |
-| D5: segurança | Segredos no Secret Manager e fora do Git; relatório com um achado corrigido (CKV_GCP_32) e um aceito (CKV_GCP_106) | `gcloud secrets list`; `docs/evidencias/checkov-iac.txt` | _a definir_ |
-| D6: backup | Bucket, ciclo de vida (1 dia), CMEK, cópia existente; custo anual GFS | `sudo zad-backup.sh` na vm-db; `gcloud storage ls -l gs://<bucket>/diario/`; `gcloud storage buckets describe gs://<bucket>` | _a definir_ |
-| D7: alta disponibilidade | Diagrama e análise de custo | `docs/alta-disponibilidade.md` | _a definir_ |
+| D1: estado consistente | `terraform plan` sem alterações e `terraform output` | `terraform -chdir=infra plan`, `terraform -chdir=infra output` | Luiz Felipe |
+| D2: aplicação | HTTPS (cadeado), login, cadastrar produto, recarregar | navegador em `https://megainventory.duckdns.org` | Luiz Felipe |
+| D3: acesso administrativo | SSH ao bastion, ProxyJump à vm-backend, recusa de senha | `ssh zadadmin@<bastion>`, `ssh -J zadadmin@<bastion> zadadmin@10.10.2.10`, `ssh -o PubkeyAuthentication=no -o PreferredAuthentications=password zadadmin@<bastion>` | Luiz Felipe |
+| D4: NAT e isolamento | IP de saída = `nat_public_ip`; backend sem IP externo; regra SSH só com /32 | `curl -s https://ifconfig.me` na vm-backend; `gcloud compute instances list`; `gcloud compute firewall-rules describe zad-allow-ssh-admin` | Luiz Felipe |
+| D5: segurança | Segredos no Secret Manager e fora do Git; relatório com um achado corrigido (CKV_GCP_32) e um aceito (CKV_GCP_106) | `gcloud secrets list`; `docs/evidencias/checkov-iac.txt` | Eduardo |
+| D6: backup | Bucket, ciclo de vida (1 dia), CMEK, cópia existente; custo anual GFS | `sudo zad-backup.sh` na vm-db; `gcloud storage ls -l gs://<bucket>/diario/`; `gcloud storage buckets describe gs://<bucket>` | Eduardo |
+| D7: alta disponibilidade | Diagrama e análise de custo | `docs/alta-disponibilidade.md` | Eduardo |
 
 ## Entrega 2 — Implantação na GCP
 
