@@ -102,7 +102,7 @@ Afinidade de sessão no LB: **desnecessária**.
 ## Custo da alta disponibilidade
 
 Estimativa em operação contínua (730 h/mês) na **calculadora oficial** (Google Cloud Pricing Calculator), região São Paulo, preços de 21/11/2026:
-**<https://cloud.google.com/products/calculator?dl=CjhDaVF6Tm1RNE9HTTVaaTA1TTJSbUxUUTNNR1l0WVRBNU1TMHpNMlUyTmpJM016Qm1OemtRQVE9PRAOGiRFQTUwODg2OS00MDgwLTREMjctODAxOS0yMTFENUY2RjA1QjE>**. Exportação por SKU: [`custos/estimativa-ha-calculadora.csv`](custos/estimativa-ha-calculadora.csv).
+**<https://cloud.google.com/products/calculator?dl=CjhDaVF6Tm1RNE9HTTVaaTA1TTJSbUxUUTNNR1l0WVRBNU1TMHpNMlUyTmpJM016Qm1OemtRQVE9PRAOGiRFQTUwODg2OS00MDgwLTREMjctODAxOS0yMTFENUY2RjA1QjE>**. Exportação por SKU: [`custos/estimativa-ha-calculadora.csv`](custos/estimativa-ha-calculadora.csv). A calculadora gera um link novo a cada compartilhamento ou exportação; por isso o link gravado no CSV é diferente do link acima, mas os dois são da mesma estimativa (total de US$ 264,51).
 
 | Item na calculadora | Configuração | Custo mensal |
 |---|---|---|
@@ -114,7 +114,7 @@ Estimativa em operação contínua (730 h/mês) na **calculadora oficial** (Goog
 | **Total (calculadora)** | | **US$ 264,51** |
 
 Observações sobre a estimativa:
-- A calculadora agrupa os dois balanceadores num único item regional, cobrado pelo mínimo de regras de encaminhamento (SKU *Regional External Proxy Network Load Balancer Forwarding Rule Minimum*). Com o externo global e o interno separados, o item ficaria em ~US$ 37, ou seja, ~US$ 9 a mais.
+- **Simplificação no balanceamento:** a proposta tem dois balanceadores (o externo global de aplicação e o interno de passagem), mas na calculadora eles foram lançados como **um único item regional com 3 regras de encaminhamento**, cobrado pelo mínimo de regras (SKU *Regional External Proxy Network Load Balancer Forwarding Rule Minimum*, US$ 27,74). Lançados separadamente, cada um cobraria o próprio mínimo de regras (~US$ 18,25 cada), e o item ficaria em ~US$ 37, ou seja, ~US$ 9 a mais (total de ~US$ 273,5, +263%). A diferença não altera a conclusão.
 - Não foram lançados o IP externo do bastion (US$ 1,83) nem o egress de 2 GiB (US$ 0,38). Somados, o total iria a ~US$ 266,72; a diferença não altera a conclusão.
 - Os itens de KMS e Secret Manager (~US$ 0,30) existem nos dois cenários e foram deixados de fora da comparação.
 

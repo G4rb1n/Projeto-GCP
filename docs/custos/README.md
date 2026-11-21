@@ -43,3 +43,5 @@ Estimativas feitas na **Google Cloud Pricing Calculator** (<https://cloud.google
 
 - **Proposta de HA (Parte C): US$ 264,51/mês** — <https://cloud.google.com/products/calculator?dl=CjhDaVF6Tm1RNE9HTTVaaTA1TTJSbUxUUTNNR1l0WVRBNU1TMHpNMlUyTmpJM016Qm1OemtRQVE9PRAOGiRFQTUwODg2OS00MDgwLTREMjctODAxOS0yMTFENUY2RjA1QjE>
 - **Backup (Parte D): GFS no mês 12 US$ 0,0643/mês e política mínima US$ 0,00035/mês** — <https://cloud.google.com/products/calculator?dl=CjhDaVJrWVdJd09EazNOeTA1TURBMUxUUmpPR1l0WW1RNVpTMWtNR0psWWpSa01qWmpZVE1RQVE9PRAJGiQ1MEYyOTJENi1FQ0NDLTREMjMtOERGQy05NjlDOUI1OEVBOEU>
+
+A calculadora gera um link novo a cada compartilhamento ou exportação. Os links acima e os gravados dentro dos CSVs são snapshots das mesmas estimativas, com os mesmos totais.
