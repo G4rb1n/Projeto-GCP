@@ -57,7 +57,7 @@ A arquitetura projetada para a disciplina roda em `southamerica-east1`, dentro d
 |---|---|---|---|
 | D1: estado consistente | `terraform plan` sem alterações e `terraform output` | `terraform -chdir=infra plan`, `terraform -chdir=infra output` | _a definir_ |
 | D2: aplicação | HTTPS (cadeado), login, cadastrar produto, recarregar | navegador em `https://megainventory.duckdns.org` | _a definir_ |
-| D3: acesso administrativo | SSH ao bastion, ProxyJump à vm-backend, recusa de senha | `ssh zadadmin@<bastion>`, `ssh -J zadadmin@<bastion> zadadmin@10.10.2.10`, `ssh -o PubkeyAuthentication=no zadadmin@<bastion>` | _a definir_ |
+| D3: acesso administrativo | SSH ao bastion, ProxyJump à vm-backend, recusa de senha | `ssh zadadmin@<bastion>`, `ssh -J zadadmin@<bastion> zadadmin@10.10.2.10`, `ssh -o PubkeyAuthentication=no -o PreferredAuthentications=password zadadmin@<bastion>` | _a definir_ |
 | D4: NAT e isolamento | IP de saída = `nat_public_ip`; backend sem IP externo; regra SSH só com /32 | `curl -s https://ifconfig.me` na vm-backend; `gcloud compute instances list`; `gcloud compute firewall-rules describe zad-allow-ssh-admin` | _a definir_ |
 | D5: segurança | Segredos no Secret Manager e fora do Git; relatório com um achado corrigido (CKV_GCP_32) e um aceito (CKV_GCP_106) | `gcloud secrets list`; `docs/evidencias/checkov-iac.txt` | _a definir_ |
 | D6: backup | Bucket, ciclo de vida (1 dia), CMEK, cópia existente; custo anual GFS | `sudo zad-backup.sh` na vm-db; `gcloud storage ls -l gs://<bucket>/diario/`; `gcloud storage buckets describe gs://<bucket>` | _a definir_ |
