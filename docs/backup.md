@@ -96,7 +96,7 @@ Só a geração **Son**, configurada inteiramente pelo Terraform:
 - Banco com **0,30 GB** no mês 1 e crescimento de **0,03 GB/mês** (~200 vendas/dia com itens, índices e histórico de operações).
 - Dump comprimido = **25%** do tamanho do banco (texto SQL sem índices, gzip).
 - Retenção em regime: 7 Son + 5 Father + até 12 Grandfather (no mês 1: 7 + 4 + 1). Cada cópia tem o tamanho do banco no mês em que foi feita.
-- Preços unitários de São Paulo (`southamerica-east1`), tabela pública do Cloud Storage; **conferir na calculadora oficial**:
+- Preços unitários de São Paulo (`southamerica-east1`) **obtidos na calculadora oficial** em 21/11/2026 (<https://cloud.google.com/products/calculator?dl=CjhDaVJrWVdJd09EazNOeTA1TURBMUxUUmpPR1l0WW1RNVpTMWtNR0psWWpSa01qWmpZVE1RQVE9PRAJGiQ1MEYyOTJENi1FQ0NDLTREMjMtOERGQy05NjlDOUI1OEVBOEU>; exportação em [`custos/estimativa-backup-calculadora.csv`](custos/estimativa-backup-calculadora.csv)). Com o volume do mês 12 (1,1 GiB Standard, 0,8 GiB Nearline, 1,4 GiB Coldline), a calculadora devolveu US$ 0,0385 + US$ 0,016 + US$ 0,0098 = **US$ 0,0643/mês**, o mesmo valor do mês 12 da tabela abaixo. Valores de operação e leitura são da tabela pública de preços do Cloud Storage:
 
 | Item | Standard | Nearline | Coldline |
 |---|---|---|---|
@@ -139,4 +139,4 @@ Reduzir o Son para 3 dias economizaria ~US$ 0,20/ano, mas um erro percebido na s
 
 ### Política mínima no período do trabalho
 
-Cópias de alguns KB a poucos MB (banco de teste), retidas no máximo 2 dias, em ~5 sessões: armazenamento e operações abaixo de **US$ 0,01**. A chave KMS `zad-backup` acrescenta US$ 0,06 por versão de chave ativa por mês, proporcional às horas em que o ambiente existe (~US$ 0,01). **Total estimado: ~US$ 0,02 no período.** O valor real será comparado no painel de faturamento após a apresentação (`docs/custos/`).
+Na mesma estimativa da calculadora, a política mínima foi lançada como **0,01 GiB em Standard** (uma cópia do banco de teste por vez, retida no máximo 2 dias): **US$ 0,00035/mês**, ou seja, US$ 0,00 arredondado, próximo de zero como exigido. Somando as operações de gravação (alguns dumps por sessão, ~5 sessões) e a chave KMS `zad-backup` (US$ 0,06 por versão de chave ativa por mês, proporcional às horas em que o ambiente existe, ~US$ 0,01), o **total estimado é de ~US$ 0,01 no período**. O valor real será comparado no painel de faturamento após a apresentação (`docs/custos/`).

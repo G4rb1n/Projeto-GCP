@@ -38,7 +38,8 @@ Estimativas feitas na **Google Cloud Pricing Calculator** (<https://cloud.google
 | `estimativa-ha-calculadora.csv` | Exportação da calculadora: proposta de alta disponibilidade (Parte C), operação contínua, **US$ 264,51/mês** |
 | `estimativa-ha.csv` | Primeira estimativa da HA, feita com as tabelas públicas de preço antes da calculadora (US$ 254,46); mantida para comparação |
 | `gfs-12-meses.csv` | Custo da política de backup GFS mês a mês, por 12 meses (Parte D, B7) |
+| `estimativa-backup-calculadora.csv` | Exportação da calculadora: gerações do GFS no mês 12 (US$ 0,0643/mês) e política mínima (US$ 0,00035/mês) |
 | _(após a apresentação)_ | Custo real observado no painel de faturamento × cenário B da Entrega 1 |
 
 - **Proposta de HA (Parte C): US$ 264,51/mês** — <https://cloud.google.com/products/calculator?dl=CjhDaVF6Tm1RNE9HTTVaaTA1TTJSbUxUUTNNR1l0WVRBNU1TMHpNMlUyTmpJM016Qm1OemtRQVE9PRAOGiRFQTUwODg2OS00MDgwLTREMjctODAxOS0yMTFENUY2RjA1QjE>
-
+- **Backup (Parte D): GFS no mês 12 US$ 0,0643/mês e política mínima US$ 0,00035/mês** — <https://cloud.google.com/products/calculator?dl=CjhDaVJrWVdJd09EazNOeTA1TURBMUxUUmpPR1l0WW1RNVpTMWtNR0psWWpSa01qWmpZVE1RQVE9PRAJGiQ1MEYyOTJENi1FQ0NDLTREMjMtOERGQy05NjlDOUI1OEVBOEU>
