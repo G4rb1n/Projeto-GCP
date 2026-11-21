@@ -62,7 +62,7 @@ Consequências da escolha:
 - Backups automáticos diários (7 dias) com **PITR**; o dump lógico do [ADR-005](adr/005-backup.md) continua gerando as gerações semanal e mensal.
 - `require_secure_transport` ligado (S3), CMEK com a chave `zad-disco` (S6), acesso só pela faixa de Private Service Access.
 
-Alternativa descartada: **réplica MySQL própria** em VM na zona `-b` (mais barata, ~US$ 87/mês a menos no total, mas com failover manual, risco de perder transações na replicação assíncrona e operação de replicação pelo grupo). Detalhes no ADR-004.
+Alternativa descartada: **réplica MySQL própria** em VM na zona `-b` (mais barata, ~US$ 108/mês a menos no total, mas com failover manual, risco de perder transações na replicação assíncrona e operação de replicação pelo grupo). Detalhes no ADR-004.
 
 ## H5. Estado fora da instância
 
@@ -101,31 +101,32 @@ Afinidade de sessão no LB: **desnecessária**.
 
 ## Custo da alta disponibilidade
 
-Estimativa em operação contínua (730 h/mês), mesma região e mesmos valores unitários da calculadora usados no cenário A da Entrega 1. Planilha: [`custos/estimativa-ha.csv`](custos/estimativa-ha.csv).
+Estimativa em operação contínua (730 h/mês) na **calculadora oficial** (Google Cloud Pricing Calculator), região São Paulo, preços de 21/11/2026:
+**<https://cloud.google.com/products/calculator?dl=CjhDaVF6Tm1RNE9HTTVaaTA1TTJSbUxUUTNNR1l0WVRBNU1TMHpNMlUyTmpJM016Qm1OemtRQVE9PRAOGiRFQTUwODg2OS00MDgwLTREMjctODAxOS0yMTFENUY2RjA1QjE>**. Exportação por SKU: [`custos/estimativa-ha-calculadora.csv`](custos/estimativa-ha-calculadora.csv).
 
-> ⚠️ **Confirmar na calculadora oficial** (Google Cloud Pricing Calculator) e colar aqui o link da estimativa salva, como foi feito na Entrega 1. Os valores do Cloud SQL e dos balanceadores foram obtidos das tabelas públicas de preço e podem diferir alguns por cento.
-
-| Item | Configuração | Custo mensal |
+| Item na calculadora | Configuração | Custo mensal |
 |---|---|---|
-| `mig-frontend` | 2× e2-micro + 2× 10 GB `pd-standard` | US$ 20,61 |
-| `mig-backend` | 2× e2-small + 2× 20 GB `pd-balanced` (mínimo do autoescalonamento) | US$ 44,83 |
-| Bastion | 1× e2-micro + 10 GB + IP externo | US$ 12,14 |
-| LB externo global | Regras 443 e 80 (dentro das 5 primeiras, US$ 0,025/h) + ~4 GiB processados | US$ 18,30 |
-| LB interno de passagem | 1 regra regional (US$ 0,025/h) | US$ 18,25 |
-| Cloud NAT | Gateway para 4 VMs + IP + 2 GiB | US$ 7,83 |
-| **Cloud SQL HA** | 1 vCPU HA (US$ 0,108/h) + 3,75 GiB HA (US$ 0,018/GiB·h) + 10 GB SSD | **US$ 132,12** |
-| Egress | 2 GiB | US$ 0,38 |
-| **Total** | | **US$ 254,46** |
+| Front + Bastion (Compute Engine) | 3× e2-micro (2 `mig-frontend` + bastion), 3× 10 GB `pd-standard` | US$ 30,92 |
+| Back (Compute Engine) | 2× e2-small (`mig-backend`, mínimo do autoescalonamento), 2× 20 GB `pd-balanced` | US$ 44,83 |
+| **MySQL (Cloud SQL)** | Enterprise, **HA regional**, 1 vCPU, 3,75 GiB, 10 GB SSD, 1 GB de backup | **US$ 153,15** |
+| Cloud Load Balancing | 3 regras de encaminhamento (443 e 80 do externo + 1 do interno), 2 GiB de entrada e 2 GiB de saída | US$ 27,79 |
+| Cloud NAT | Gateway para 4 VMs + 1 IP + 2 GiB processados | US$ 7,83 |
+| **Total (calculadora)** | | **US$ 264,51** |
+
+Observações sobre a estimativa:
+- A calculadora agrupa os dois balanceadores num único item regional, cobrado pelo mínimo de regras de encaminhamento (SKU *Regional External Proxy Network Load Balancer Forwarding Rule Minimum*). Com o externo global e o interno separados, o item ficaria em ~US$ 37, ou seja, ~US$ 9 a mais.
+- Não foram lançados o IP externo do bastion (US$ 1,83) nem o egress de 2 GiB (US$ 0,38). Somados, o total iria a ~US$ 266,72; a diferença não altera a conclusão.
+- Os itens de KMS e Secret Manager (~US$ 0,30) existem nos dois cenários e foram deixados de fora da comparação.
 
 | Versão | Custo mensal estimado | Variação |
 |---|---|---|
 | Arquitetura implantada (Entrega 1, cenário A) | US$ 75,25 | - |
-| **Proposta de alta disponibilidade** | **US$ 254,46** | **+238%** |
-| (Alternativa: réplica MySQL própria em vez do Cloud SQL) | US$ 167,17 | +122% |
+| **Proposta de alta disponibilidade** | **US$ 264,51** | **+252%** |
+| (Alternativa: réplica MySQL própria em vez do Cloud SQL) | US$ 156,19 | +108% |
 
-**Itens que mais contribuem para o aumento** (+US$ 179,21):
-1. **Cloud SQL HA: +US$ 132,12** (74% do aumento). A e2-small que era a `vm-db` passa a ser a segunda instância do backend, então o banco gerenciado entra como item novo, e o modo HA cobra vCPU e memória em dobro pela standby.
-2. **Os dois balanceadores: +US$ 36,55** (20%). Cobrados por hora mesmo sem tráfego.
-3. **Demais itens: +US$ 10,52** (6%): segundo frontend (+US$ 9,71), um disco a mais (+US$ 0,60), NAT atendendo mais VMs (+US$ 2,04), menos um IP externo nas VMs (−US$ 1,83).
+**Itens que mais contribuem para o aumento** (+US$ 189,26):
+1. **Cloud SQL HA: +US$ 153,15** (81% do aumento). A e2-small que era a `vm-db` passa a ser a segunda instância do backend, então o banco gerenciado entra como item novo, e o modo HA cobra vCPU e memória em dobro pela standby.
+2. **Balanceamento de carga: +US$ 27,79** (15%). Cobrado por hora pelas regras de encaminhamento, mesmo sem tráfego.
+3. **Demais itens: +US$ 8,32** (4%): segundo frontend (+US$ 9,71), um disco a mais (+US$ 0,60), NAT atendendo mais VMs (+US$ 2,05), IPs externos das VMs e egress não lançados (−US$ 4,03).
 
-**Esse custo se justifica para o perfil da seção 5.1? Não.** O ZadInventory atende até 20 usuários de um comércio pequeno em horário comercial, com RTO de 1 h e RPO de 24 h aceitos. Uma falha de VM ou zona é rara; quando ocorre, o grupo recria tudo com `terraform apply` + `deploy.sh` + restauração do dump dentro de 1 h, e o comércio continua vendendo com anotações no papel nesse intervalo. Pagar **3,4 vezes mais (~US$ 2.150 a mais por ano)** para evitar algumas horas de indisponibilidade por ano não compensa para o faturamento de um comércio desse porte. A proposta passa a se justificar se o sistema operar 24×7, atender várias lojas simultaneamente ou tiver vendas online, quando cada hora parada custa mais que a diferença mensal. Um passo intermediário mais barato seria só o LB com dois frontends e o Cloud SQL **sem** HA (zonal), aceitando o banco como ponto único com backup.
+**Esse custo se justifica para o perfil da seção 5.1? Não.** O ZadInventory atende até 20 usuários de um comércio pequeno em horário comercial, com RTO de 1 h e RPO de 24 h aceitos. Uma falha de VM ou zona é rara; quando ocorre, o grupo recria tudo com `terraform apply` + `deploy.sh` + restauração do dump dentro de 1 h, e o comércio continua vendendo com anotações no papel nesse intervalo. Pagar **3,5 vezes mais (~US$ 2.270 a mais por ano)** para evitar algumas horas de indisponibilidade por ano não compensa para o faturamento de um comércio desse porte. A proposta passa a se justificar se o sistema operar 24×7, atender várias lojas simultaneamente ou tiver vendas online, quando cada hora parada custa mais que a diferença mensal. Um passo intermediário mais barato seria só o LB com dois frontends e o Cloud SQL **sem** HA (zonal), aceitando o banco como ponto único com backup.
